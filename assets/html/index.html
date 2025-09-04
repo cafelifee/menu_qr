@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAF'E LİFE - Dijital Menü</title>
+    <meta name="description" content="CAF'E LİFE - Waffle, Tatlı, Aperatif ve İçecek Menümüz. QR kod ile kolay erişim!">
+    <meta name="keywords" content="waffle, kafe, tatlı, içecek, triliçe, tiramisu, aperatif, tost, sandviç, hamburger, salata, dijital menü">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a56, #ff6b35, #ffa726);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35, #ff9a56);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .emoji-decoration {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .emoji-line {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            animation: slide 15s linear infinite;
+            font-size: 1.5rem;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .title-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
+            letter-spacing: 4px;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .menu-content {
+            padding: 40px 30px;
+        }
+
+        .category {
+            margin-bottom: 50px;
+        }
+
+        .category h2 {
+            font-size: 2.8rem;
+            color: #ff6b35;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 4px solid #ff9a56;
+            padding-bottom: 15px;
+            font-weight: 800;
+            position: relative;
+        }
+
+        .category h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #ff9a56);
+            border-radius: 2px;
+        }
+
+        .subcategory {
+            margin-bottom: 35px;
+        }
+
+        .subcategory h3 {
+            font-size: 1.8rem;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 4px solid #ff9a56;
+            font-weight: 700;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border-color: #ff9a56;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            background: linear-gradient(135deg, #ff9a56, #ffa726);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .menu-item:hover .item-image {
+            transform: scale(1.05);
+        }
+
+        .item-content {
+            padding: 25px;
+            position: relative;
+        }
+
+        .item-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .item-description {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+            color: #ff6b35;
+            font-weight: 700;
+            float: right;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            padding: 8px 15px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .waffle-options {
+            background: linear-gradient(135deg, #fff8e1, #ffe4b3);
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 3px solid #ff9a56;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .waffle-options h3 {
+            color: #ff6b35;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .option-category {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .option-category:hover {
+            transform: translateY(-3px);
+        }
+
+        .option-category h4 {
+            color: #ff6b35;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #ff9a56;
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .option-category ul {
+            list-style: none;
+        }
+
+        .option-category li {
+            padding: 4px 0;
+            color: #555;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .option-category li::before {
+            content: '🧇';
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+        }
+
+        .beverages-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .beverage-item {
+            background: white;
+            padding: 18px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .beverage-item:hover {
+            transform: translateX(5px);
+            border-left-color: #ff9a56;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .beverage-name {
+            color: #333;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .beverage-price {
+            color: #ff6b35;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.2);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #ff6b35, #ff9a56);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.8rem;
+            }
+
+            .emoji-line {
+                font-size: 1.2rem;
+                gap: 20px;
+            }
+
+            .category h2 {
+                font-size: 2.2rem;
+            }
+
+            .subcategory h3 {
+                font-size: 1.5rem;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .beverages-list {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-content {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .emoji-line {
+                font-size: 1rem;
+                gap: 15px;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emoji-decoration">
+                <div class="emoji-line">
+                    🧇 ☕ 🍰 🥧 ☕ 🍧 🧇 ☕ 🍮 🥞 ☕ 🧇 🍰 ☕ 🍧 🥧 ☕ 🧇 🍮 ☕ 🥞 🍧 ☕ 🧇 🍰
+                </div>
+            </div>
+            <div class="title-container">
+                <h1>CAF'E LİFE</h1>
+                <p>🧇 Lezzet & Keyif Buluşması ☕</p>
+            </div>
+        </div>
+
+        <div class="menu-content">
+            <!-- WAFFLE & TATLILAR -->
+            <div class="category">
+                <h2>🧇 Waffle & Tatlılar</h2>
+
+                <div class="items-grid">
+                    <div class="menu-item">
+                        <img src="assets/images/waffle.png" alt="Waffle" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Waffle</div>
+                            <div class="item-description">Taze yapılmış, sıcak waffle</div>
+                            <div class="item-price">200₺</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <img src="assets/images/çift katlı waffle.png" alt="Çift Katlı Waffle" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Çift Katlı Waffle</div>
+                            <div class="item-description">Ekstra lezzet için çift kat</div>
+                            <div class="item-price">250₺</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <img src="assets/images/bardak waffle.png" alt="Bardak Waffle" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Bardak Waffle</div>
+                            <div class="item-description">Praktik bardak sunumu</div>
+                            <div class="item-price">180₺</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <img src="assets/images/waffle pasta.png" alt="Waffle Pasta" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Waffle Pasta (5 Kişilik)</div>
+                            <div class="item-description">Paylaşmak için ideal büyük boy</div>
+                            <div class="item-price">600₺</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <img src="assets/images/tiramisu.png" alt="Tiramisu" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Tiramisu</div>
+                            <div class="item-description">İtalyan klasiği</div>
+                            <div class="item-price">180₺</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <img src="assets/images/triliçe.png" alt="Triliçe" class="item-image">
+                        <div class="item-content">
+                            <div class="item-name">Triliçe</div>
+                            <div class="item-description">Geleneksel lezzet</div>
+                            <div class="item-price">150₺</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waffle Kişiselleştirme Seçenekleri -->
+                <div class="waffle-options">
+                    <h3>🧇 Waffle Kişiselleştirme Seçenekleri</h3>
+                    <div class="options-grid">
+                        <div class="option-category">
+                            <h4>Taban Çikolatalı</h4>
+                            <ul>
+                                <li>Düz Çikolata</li>
+                                <li>Sütlü Çikolata</li>
+                                <li>Bitter Krema</li>
+                            </ul>
+                        </div>
+
+                        <div class="option-category">
+                            <h4>Soslar</h4>
+                            <ul>
+                                <li>Çilek</li>
+                                <li>Antep Fıstığı</li>
+                                <li>Sütlü Çikolata</li>
+                                <li>Bitter Çikolata</li>
+                                <li>Beyaz Çikolata</li>
+                                <li>Frambuaz</li>
+                                <li>Karamel</li>
+                                <li>Bubble Gum</li>
+                            </ul>
+                        </div>
+
+                        <div class="option-category">
+                            <h4>Malzemeler</h4>
+                            <ul>
+                                <li>Fındık</li>
+                                <li>Krem Kızı</li>
+                                <li>Ahududulu Buğday Patlağı</li>
+                                <li>Beyaz Buğday Patlağı</li>
+                                <li>Bakır Buğday Patlağı</li>
+                                <li>Sedef Buğday Patlağı</li>
+                                <li>Frambuazlı Buğday Patlağı</li>
+                                <li>Damla Çikolata</li>
+                                <li>Beyaz Damla Çikolata</li>
+                                <li>Ahududulu Damla Çikolata</li>
+                                <li>Çakıl Taşı Çikolata</li>
+                                <li>Bitter Çikolata</li>
+                            </ul>
+                        </div>
+
+                        <div class="option-category">
+                            <h4>Meyveler & Süsleme</h4>
+                            <ul>
+                                <li>Muz</li>
+                                <li>Çilek</li>
+                                <li>Çikolata Süsleme</li>
+                                <li>Karamel Süsleme</li>
+                                <li>Çilek Süsleme</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APARATİFLER -->
+            <div class="category">
+                <h2>🍽️ Aperatifler</h2>
+
+                <div class="subcategory">
+                    <h3>🍞 Tostlar</h3>
+                    <div class="beverages-list">
+                        <div class="beverage-item"><span class="beverage-name">Kaşarlı Tost</span><span class="beverage-price">75₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Karışık Tost</span><span class="beverage-price">110₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Sucuklu Tost</span><span class="beverage-price">90₺</span></div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3>🥪 Sandviçler</h3>
+                    <div class="beverages-list">
+                        <div class="beverage-item"><span class="beverage-name">Mozzarella & Domates Sandviç</span><span class="beverage-price">50₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Beyaz Peynirli Sandviç</span><span class="beverage-price">50₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Cheddar & Hindi Füme</span><span class="beverage-price">60₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Avokadolu Sandviç</span><span class="beverage-price">70₺</span></div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3>🍗 Ana Yemekler</h3>
+                    <div class="beverages-list">
+                        <div class="beverage-item"><span class="beverage-name">Çıtır Tavuk Dürüm</span><span class="beverage-price">140₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Cheeseburger</span><span class="beverage-price">160₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Çıtır Tavuk Menü</span><span class="beverage-price">200₺</span></div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3>🥗 Salatalar</h3>
+                    <div class="beverages-list">
+                        <div class="beverage-item"><span class="beverage-name">Salata</span><span class="beverage-price">110₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Tavuklu Salata</span><span class="beverage-price">150₺</span></div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3>🍿 Atıştırmalıklar</h3>
+                    <div class="beverages-list">
+                        <div class="beverage-item"><span class="beverage-name">Granula</span><span class="beverage-price">140₺</span></div>
+                        <div class="beverage-item"><span class="beverage-name">Atıştırmalık Tabağı</span><span class="beverage-price">145₺</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SICAK İÇECEKLER -->
+            <div class="category">
+                <h2>☕ Sıcak İçecekler</h2>
+                <div class="beverages-list">
+                    <div class="beverage-item"><span class="beverage-name">Çay</span><span class="beverage-price">20₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Fincan Çay</span><span class="beverage-price">40₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Türk Kahvesi</span><span class="beverage-price">80₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Double Türk Kahvesi</span><span class="beverage-price">100₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Americano</span><span class="beverage-price">90₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Cappuccino</span><span class="beverage-price">110₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Latte</span><span class="beverage-price">120₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Karamel Latte</span><span class="beverage-price">140₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">White Chocolate Mocha</span><span class="beverage-price">125₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Sıcak Çikolata</span><span class="beverage-price">110₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Filtre Kahve</span><span class="beverage-price">85₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Mocha</span><span class="beverage-price">125₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Flat White</span><span class="beverage-price">115₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Chai Tea Latte</span><span class="beverage-price">130₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Espresso</span><span class="beverage-price">90₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Double Espresso</span><span class="beverage-price">110₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Bitki Çayları</span><span class="beverage-price">90₺</span></div>
+                </div>
+            </div>
+
+            <!-- SOĞUK İÇECEKLER -->
+            <div class="category">
+                <h2>🧊 Soğuk İçecekler</h2>
+                <div class="beverages-list">
+                    <div class="beverage-item"><span class="beverage-name">Ice Americano</span><span class="beverage-price">95₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ice Latte</span><span class="beverage-price">125₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ice Karamel Latte</span><span class="beverage-price">145₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ice Mocha</span><span class="beverage-price">135₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ice White Chocolate Mocha</span><span class="beverage-price">135₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Milkshake (Çilek/Muz/Çikolata)</span><span class="beverage-price">150₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Smoothie (Karma Meyve/Çilek/Mango)</span><span class="beverage-price">150₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Limonata</span><span class="beverage-price">90₺</span></div>
+                </div>
+            </div>
+
+            <!-- DİĞER İÇECEKLER -->
+            <div class="category">
+                <h2>🥤 Diğer İçecekler</h2>
+                <div class="beverages-list">
+                    <div class="beverage-item"><span class="beverage-name">Meşrubat</span><span class="beverage-price">60₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Soda</span><span class="beverage-price">40₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Maden Suyu (Aromalı)</span><span class="beverage-price">50₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ayran (Küçük)</span><span class="beverage-price">40₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Ayran (Büyük)</span><span class="beverage-price">50₺</span></div>
+                    <div class="beverage-item"><span class="beverage-name">Şişe Su</span><span class="beverage-price">25₺</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            🧇 CAF'E LİFE - 2025 © Tüm hakları saklıdır  🧇
+        </div>
+    </div>
+</body>
+</html>
